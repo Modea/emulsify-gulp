@@ -3,7 +3,8 @@
 ((() => {
   const themeDir = './';
   const paths = {
-    js: `${themeDir}/components/_patterns/00-base/global/*.js`,
+    footer_js: `${themeDir}/components/_patterns/00-base/global/js-footer/*.js`,
+    header_js: `${themeDir}/components/_patterns/00-base/global/js-header/*.js`,
     styleguide_js: [
       `${themeDir}/js/**/*.js`,
       `${themeDir}/components/_patterns/**/*.js`,

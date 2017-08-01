@@ -41,10 +41,18 @@ module.exports = (gulp, config) => {
   /**
    * Script Task
    */
-  gulp.task('scripts', () => {
-    gulp.src(config.paths.js)
-      // Concatenate everything within the JavaScript folder.
-      .pipe(concat('scripts.js'))
+  gulp.task('scripts-footer', () => {
+    gulp.src(config.paths.footer_js)
+      // Concatenate everything within the js-footer folder.
+      .pipe(concat('scripts-footer.js'))
+      .pipe(uglify())
+      .pipe(gulp.dest(config.paths.dist_js));
+  });
+
+  gulp.task('scripts-header', () => {
+    gulp.src(config.paths.header_js)
+      // Concatenate everything within the js-header folder.
+      .pipe(concat('scripts-header.js'))
       .pipe(uglify())
       .pipe(gulp.dest(config.paths.dist_js));
   });
@@ -94,7 +102,7 @@ module.exports = (gulp, config) => {
   /**
    * Task for running browserSync.
    */
-  gulp.task('serve', ['css', 'scripts', 'styleguide-scripts', 'watch:pl'], () => {
+  gulp.task('serve', ['css', 'scripts-footer', 'scripts-header', 'styleguide-scripts', 'watch:pl'], () => {
     if (config.browserSync.domain) {
       browserSync.init({
         injectChanges: true,
@@ -116,7 +124,8 @@ module.exports = (gulp, config) => {
         port: openPort,
       });
     }
-    gulp.watch(config.paths.js, ['scripts']).on('change', browserSync.reload);
+    gulp.watch(config.paths.js, ['scripts-footer']).on('change', browserSync.reload);
+    gulp.watch(config.paths.js, ['scripts-header']).on('change', browserSync.reload);
     gulp.watch(config.paths.styleguide_js, ['styleguide-scripts']).on('change', browserSync.reload);
     gulp.watch(`${config.paths.sass}/**/*.scss`, ['css']);
     gulp.watch(config.patternLab.scssToYAML[0].src, ['pl:scss-to-yaml']);
@@ -137,7 +146,7 @@ module.exports = (gulp, config) => {
   /**
    * Theme task declaration
    */
-  gulp.task('build', ['imagemin', 'clean', 'scripts', 'styleguide-scripts', 'css', 'icons']);
+  gulp.task('build', ['imagemin', 'clean', 'scripts-header', 'scripts-footer', 'styleguide-scripts', 'css', 'icons']);
 
   /**
    * Deploy
